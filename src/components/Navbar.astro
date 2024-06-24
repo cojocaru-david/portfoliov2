@@ -1,0 +1,100 @@
+---
+import Button from './Button.astro';
+
+const navItems = [
+    {
+        name: 'Home',
+        href: '/'
+    },
+    {
+        name: 'Services',
+        href: '/services'
+    },
+    {
+        name: 'Blog',
+        href: '/blog'
+    },
+    {
+        name: 'Contact',
+        href: '/contact'
+    }
+];
+
+const pathname = new URL(Astro.request.url).pathname;
+const currentPath = pathname.slice(1);
+---
+
+<header class="w-full max-w-screen-xl mx-auto px-4 relative">
+    <nav class="flex justify-between items-center py-4">
+        <div class="flex items-center space-x-6 justify-center flex-col md:flex-row md:flex justify-start relative">
+            <a href="/" class="md:text-2xl font-bold">Cojocaru David</a>
+            <div class="flex items-center space-x-2 md:space-x-6 font-light flex-col md:flex-row hidden md:flex" id="main-navigation">
+                {navItems.map(item => (
+                    <a href={item.href} class={`px-2 py-1 text-sm md:text-base transition-colors duration-300 text-white ${currentPath === item.href.slice(1) ? 'bg-gradient-to-r from-[#B16CEA] to-[#FF5E69] bg-[length:100%_1px] bg-no-repeat bg-bottom' : 'hover-animate-background'}`}>{item.name}</a>
+                ))}
+            </div>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button class="md:hidden" aria-label="Toggle menu" id="menu-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+            <Button href="mail:contact@cojocarudavid.me" variant="secondary">Let's talk</Button>
+        </div>
+    </nav>
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden backdrop-blur-sm" id="menu-overlay"></div>
+    <div class="fixed top-0 left-0 w-64 h-full shadow-md transform -translate-x-full transition-transform duration-300 z-50 bg-neutral-100" id="mobile-menu">
+        <button class="absolute top-4 -right-7 bg-neutral-100 p-2 rounded-lg text-neutral-900 hidden z-[20]" aria-label="Close menu" id="menu-close">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+        <div class="flex flex-col items-start p-4 space-y-2">
+            {navItems.map(item => (
+                <a href={item.href} class={`w-full px-4 py-2 text-lg transition-colors duration-300 text-black ${currentPath === item.href.slice(1) ? 'bg-gradient-to-r from-[#B16CEA] to-[#FF5E69] bg-[length:100%_1px] bg-no-repeat bg-bottom' : 'hover-animate-background'}`}>{item.name}</a>
+            ))}
+        </div>
+    </div>
+    
+</header>
+
+<script type="module">
+    var navBar = {
+        open: false,
+        button: document.getElementById("menu-toggle"),
+        menu: document.getElementById("mobile-menu"),
+        overlay: document.getElementById("menu-overlay"),
+        closeBtn: document.getElementById("menu-close"),
+        init: function() {
+            this.button.addEventListener("click", this.toggleMenu.bind(this));
+            this.overlay.addEventListener("click", this.closeMenu.bind(this));
+            this.closeBtn.addEventListener("click", this.closeMenu.bind(this));
+            document.addEventListener("click", this.handleClickOutside.bind(this));
+        },
+        toggleMenu: function(event) {
+            event.stopPropagation();
+            this.menu.classList.toggle("translate-x-full");
+            this.overlay.classList.toggle("hidden");
+            this.closeBtn.classList.toggle("hidden");
+            this.open = !this.open;
+        },
+        closeMenu: function(event) {
+            this.menu.classList.toggle("translate-x-full");
+            this.overlay.classList.add("hidden");
+            setTimeout(() => {
+                this.closeBtn.classList.add("hidden");
+            }, 200);
+            this.open = false;
+        },
+        handleClickOutside: function(event) {
+            if (this.open && !this.menu.contains(event.target) && event.target !== this.button) {
+                this.closeMenu();
+            }
+        }
+    };
+
+    document.addEventListener("DOMContentLoaded", function() {
+        navBar.init();
+    });
+</script>

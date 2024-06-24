@@ -1,0 +1,33 @@
+---
+interface Props {
+	href: string;
+    target?: string;
+    variant?: string;
+    disabled?: boolean;
+}
+
+const { 
+    href, 
+    target, 
+    variant, 
+    disabled 
+} = Astro.props as Props;
+
+let variantBtn = variant || 'primary';
+switch (variant) {
+    case 'primary':
+        variantBtn = 'md:px-8 md:py-2 sm:px-4 sm:py-2 rounded-full bg-gradient-to-r from-[#B16CEA] to-[#FF5E69] text-white focus:ring-2 focus:ring-[#FF8A56] hover:shadow-xl transition duration-200';
+        break;
+    case 'secondary':
+        variantBtn = 'px-2 py-1 sm:px-4 sm:py-2 md:px-8 md:py-2 text-sm md:text-base rounded-full dark:bg-white dark:text-neutral-900 bg-neutral-100 text-neutral-900 focus:ring-2 focus:ring-[#FF8A56] hover:shadow-xl transition duration-200 md:font-semibold';
+        break;
+}
+---
+<a 
+    href={href}
+    target={target}
+    class={`inline-block ${variantBtn} ${disabled ? 'cursor-not-allowed opacity-50' : 'hover:opacity-90'}`}
+    {...(disabled ? { disabled: true } : {})}
+>
+    <slot />
+</a>
