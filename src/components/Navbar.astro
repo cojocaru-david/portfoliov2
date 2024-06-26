@@ -1,5 +1,6 @@
 ---
 import Button from './Button.astro';
+import ToggleTheme from './ToggleTheme.astro';
 
 const navItems = [
     {
@@ -24,13 +25,13 @@ const pathname = new URL(Astro.request.url).pathname;
 const currentPath = pathname.slice(1);
 ---
 
-<header class="w-full max-w-screen-xl mx-auto px-4 relative">
+<header class="w-full max-w-screen-xl mx-auto px-4 lg:px-12 sticky xl:top-0 xl:rounded-b-full z-50 md:backdrop-blur-md xl:border border-neutral-900/5 dark:border-neutral-100/5 bg-gradient-to-r from-[#B16CEA] to-[#FF5E69] bg-[length:100%_1px] bg-no-repeat bg-bottom">
     <nav class="flex justify-between items-center py-4">
-        <div class="flex items-center space-x-6 justify-center flex-col md:flex-row md:flex justify-start relative">
+        <div class="flex items-center space-x-6 justify-center flex-col md:flex-row md:flex relative">
             <a href="/" class="md:text-2xl font-bold">Cojocaru David</a>
-            <div class="flex items-center space-x-2 md:space-x-6 font-light flex-col md:flex-row hidden md:flex" id="main-navigation">
+            <div class="items-center space-x-2 md:space-x-6 font-light flex-col md:flex-row hidden md:flex" id="main-navigation">
                 {navItems.map(item => (
-                    <a href={item.href} class={`px-2 py-1 text-sm md:text-base transition-colors duration-300 text-white ${currentPath === item.href.slice(1) ? 'bg-gradient-to-r from-[#B16CEA] to-[#FF5E69] bg-[length:100%_1px] bg-no-repeat bg-bottom' : 'hover-animate-background'}`}>{item.name}</a>
+                    <a href={item.href} class={`px-2 py-1 text-sm md:text-base transition-colors duration-300 text-neutral-900 dark:text-neutral-100 ${currentPath === item.href.slice(1) ? 'bg-gradient-to-r from-[#B16CEA] to-[#FF5E69] bg-[length:100%_1px] bg-no-repeat bg-bottom' : 'hover-animate-background'}`}>{item.name}</a>
                 ))}
             </div>
         </div>
@@ -41,10 +42,11 @@ const currentPath = pathname.slice(1);
                 </svg>
             </button>
             <Button href="mail:contact@cojocarudavid.me" variant="secondary">Let's talk</Button>
+            <ToggleTheme component-hydration />
         </div>
     </nav>
     <div class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden backdrop-blur-sm" id="menu-overlay"></div>
-    <div class="fixed top-0 left-0 w-64 h-full shadow-md transform -translate-x-full transition-transform duration-300 z-50 bg-neutral-100" id="mobile-menu">
+    <div class="fixed lg:hidden top-0 left-0 w-64 h-full shadow-md transform -translate-x-full transition-transform duration-300 z-50 bg-neutral-100" id="mobile-menu">
         <button class="absolute top-4 -right-7 bg-neutral-100 p-2 rounded-lg text-neutral-900 hidden z-[20]" aria-label="Close menu" id="menu-close">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -52,14 +54,13 @@ const currentPath = pathname.slice(1);
         </button>
         <div class="flex flex-col items-start p-4 space-y-2">
             {navItems.map(item => (
-                <a href={item.href} class={`w-full px-4 py-2 text-lg transition-colors duration-300 text-black ${currentPath === item.href.slice(1) ? 'bg-gradient-to-r from-[#B16CEA] to-[#FF5E69] bg-[length:100%_1px] bg-no-repeat bg-bottom' : 'hover-animate-background'}`}>{item.name}</a>
+                <a href={item.href} class={`w-full px-4 py-2 text-lg transition-colors duration-300 text-neutral-900 dark:text-neutral-100 ${currentPath === item.href.slice(1) ? 'bg-gradient-to-r from-[#B16CEA] to-[#FF5E69] bg-[length:100%_1px] bg-no-repeat bg-bottom' : 'hover-animate-background'}`}>{item.name}</a>
             ))}
         </div>
     </div>
-    
 </header>
 
-<script type="module">
+<script type="module" is:inline>
     var navBar = {
         open: false,
         button: document.getElementById("menu-toggle"),
@@ -71,6 +72,7 @@ const currentPath = pathname.slice(1);
             this.overlay.addEventListener("click", this.closeMenu.bind(this));
             this.closeBtn.addEventListener("click", this.closeMenu.bind(this));
             document.addEventListener("click", this.handleClickOutside.bind(this));
+            window.addEventListener("resize", this.handleScreenResize.bind(this));
         },
         toggleMenu: function(event) {
             event.stopPropagation();
@@ -80,15 +82,21 @@ const currentPath = pathname.slice(1);
             this.open = !this.open;
         },
         closeMenu: function(event) {
-            this.menu.classList.toggle("translate-x-full");
+            this.menu.classList.remove("translate-x-full");
             this.overlay.classList.add("hidden");
             setTimeout(() => {
                 this.closeBtn.classList.add("hidden");
             }, 200);
             this.open = false;
+            event && event.stopPropagation();
         },
         handleClickOutside: function(event) {
             if (this.open && !this.menu.contains(event.target) && event.target !== this.button) {
+                this.closeMenu();
+            }
+        },
+        handleScreenResize: function() {
+            if (window.innerWidth > 768) {
                 this.closeMenu();
             }
         }

@@ -1,9 +1,105 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+import logo from '../../public/assets/images/logo_bg.svg';
+import SectionBackground from '../components/SectionBackground.astro';
+import projectsData from "../data/projects.json";
+import techStack from "../data/techStack.json";
+import { type Repository, type Technology } from "../types";
+
+
+const openSourceContributions = projectsData as Repository[];
+const TechStack = techStack as Technology[];
+const projects = openSourceContributions.sort((a, b) => b.stars - a.stars);
+const technologies = TechStack;
+
+import 'aos/dist/aos.css'; 
 ---
 
-<Layout title="Welcome to Astro.">
-	<section class="w-full max-w-screen-xl mx-auto px-4">
-	asd
+<Layout title="Home">
+	<section class="w-full max-w-screen-xl mx-auto px-4 justify-center flex flex-col py-8 md:py-16 min-h-xl" id="hero">
+		<div class="max-w-screen-md mx-auto px-4 justify-center flex flex-col h-full overflow-hidden">
+			<SectionBackground startColor="#B16CEA" endColor="#FFA84B" />
+		</div>
+		<Image src={logo} alt="David's Logo" class="w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 mx-auto mt-8 mb-8 rounded-full" decoding="async" loading="lazy" />
+		<h2 class="text-xl md:text-3xl lg:text-4xl inline-block text-neutral-800 dark:text-neutral-100 font-bold text-center max-w-7xl">
+			<span class="bg-gradient-to-r from-[#B16CEA] to-[#FFA84B] text-transparent bg-clip-text">Hello, I'm David,</span>&nbsp;a  junior full-stack web developer
+		</h2>
+		<p class="text-sm md:text-base lg:text-lg text-neutral-600 dark:text-neutral-300 mt-4 text-center max-w-3xl mx-auto">
+			I'm a passionate 16-year-old self-taught coder who thrives at the intersection of web development and design. I love building things that live on the internet, whether that be websites, applications, or anything in between.
+		</p>
+
+		<div class="flex md:flex-row items-center justify-center mt-8 space-x-4">
+			<Button href="/services" variant="secondary">Get in touch</Button>
+			<Button href="#projects" variant="outline">View projects</Button>
+		</div>
+	</section>
+
+	<section class="bg-neutral-100 dark:bg-[#191919] w-full py-8 md:py-16 h-full max-h-screen" id="aboutme">
+		<div class="w-full max-w-screen-xl mx-auto px-4 justify-center flex flex-col">
+			<h1 class="text-2xl md:text-4xl text-center text-neutral-800 dark:text-neutral-100 font-bold">About<br />
+				<span class="bg-gradient-to-r from-[#B16CEA] to-[#FFA84B] text-transparent bg-clip-text">Me</span>
+			</h1>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+				
+				
+				<div class="col-span-2 bg-white dark:bg-[#171717] rounded-lg p-4">
+					<h3 class="text-lg text-neutral-800 dark:text-neutral-100 font-bold">What technologies do I use?</h3>
+					<div class="flex flex-wrap items-center justify-start mt-2">
+						{technologies.map((tech) => (
+							<div class="flex items-center space-x-2 bg-neutral-50 dark:bg-[#1E1E1E] rounded-lg p-2 m-1">
+								<Icon name={tech.icon} class="h-5 w-5" />
+								<span class=`text-neutral-600 dark:text-neutral-300 text-${tech.color}`>{tech.name}</span>
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
+		</div>		
+	</section>
+
+	<section class="w-full max-w-screen-xl mx-auto px-4 justify-center flex flex-col py-8 md:py-16" id="projects">
+		<div class="flex flex-wrap justify-between items-center">
+			<h1 class="text-2xl md:text-4xl text-start text-neutral-800 dark:text-neutral-100 font-bold">Look at My<br />
+				<span class="bg-gradient-to-r from-[#B16CEA] to-[#FFA84B] text-transparent bg-clip-text">Latest Projects</span>
+			</h1>
+			<p class="text-sm md:text-base lg:text-lg text-neutral-500 mt-4 text-start max-w-md">
+				Here are some of the projects I've worked on recently. Want to see more projects? <a href="https://github.com/cojocaru-david" class="text-[#FFA84B] hover:underline" aria-label="View all projects on GitHub" name="View all projects on GitHub" target="_blank" rel="noopener noreferrer">View all projects on GitHub</a>.
+			</p>
+		</div>
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+			{projects.map((project, index) => (
+				<div class="row-span-1 bg-white dark:bg-[#171717] rounded-lg" id={project.name} data-aos="fade-up" data-aos-delay={index * 100}>
+					<Image src={project.image} alt={project.name} inferSize class="w-full h-48 object-cover rounded-t-lg" decoding="async" loading="lazy" />
+					<div class="flex flex-col space-y-2 bg-neutral-50 dark:bg-[#1E1E1E] p-4 rounded-b-lg">
+						<h3 class="text-lg text-neutral-800 dark:text-neutral-100 font-bold">{project.name}</h3>
+						<p class="text-sm text-neutral-600 dark:text-neutral-300 mt-2 overflow-hidden truncate">
+							{project.description}
+						</p>
+						<div class="flex items-center justify-between mt-8">
+							<a href={project.url} class="text-[#FFA84B] hover:underline">View project</a>
+							{project.stars && (
+								<div class="flex items-center space-x-2">
+									<Icon name="bi:star-fill" class="h-5 w-5 text-[#FFA84B]" />
+									<span class="text-neutral-600 dark:text-neutral-300">{project.stars}</span>
+								</div>
+							)}
+						</div>
+					</div>
+				</div>
+			))}
+		</div>
+		<a href="https://github.com/cojocaru-david" class="flex items-center justify-center bg-orange-900 font-light rounded-lg p-2 mt-4 w-full max-w-xs mx-auto" data-aos="fade-up" data-aos-delay="300" aria-label="View all projects on GitHub" name="View all projects on GitHub" target="_blank" rel="noopener noreferrer">
+			<p class="text-lg text-white flex items-center justify-center gap-2 font-normal">
+				View all projects on <Icon name="bi:github" class="h-6 w-6 text-white" />
+			</p>
+		</a>
 	</section>
 </Layout>
+
+<script> 
+	import AOS from "aos"; 
+	AOS.init(); 
+</script>

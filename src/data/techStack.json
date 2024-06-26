@@ -1,0 +1,37 @@
+[
+    {
+        "name": "Javascript",
+        "icon": "bi:filetype-js",
+        "color": "orange-500"
+    },
+    {
+        "name": "React",
+        "icon": "mdi:react",
+        "color": "blue-500"
+    },
+    {
+        "name": "Node.js",
+        "icon": "mdi:nodejs",
+        "color": "green-500"
+    },
+    {
+        "name": "MongoDB",
+        "icon": "bxl:mongodb",
+        "color": "green-500"
+    },
+    {
+        "name": "HTML",
+        "icon": "mdi:language-html5",
+        "color": "orange-500"
+    },
+    {
+        "name": "CSS",
+        "icon": "mdi:language-css3",
+        "color": "blue-500"
+    },
+    {
+        "name": "Tailwind CSS",
+        "icon": "mdi:tailwind",
+        "color": "blue-500"
+    }
+]

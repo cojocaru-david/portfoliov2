@@ -1,0 +1,58 @@
+---
+import { Icon } from 'astro-icon/components'
+
+
+---
+<button
+    id="toggleTheme"
+    aria-label="Toggle Dark Mode"
+    name="toggleTheme"
+    class="p-2 rounded-full hover:bg-neutral-300 dark:hover:bg-neutral-600 bg-opacity-25 focus:outline-none focus:ring focus:ring-neutral-300 dark:focus:ring-neutral-700"
+    
+>
+    <Icon name="bi:lightbulb-off-fill" class="hidden dark:block" />
+    <Icon name="bi:lightbulb" class="block dark:hidden" />
+</button>
+
+<script is:inline>
+    const element = document.documentElement;
+
+    const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+            return localStorage.getItem('theme');
+        }
+
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+        }
+
+        return 'light';
+    })();
+  
+    element.classList.add(theme);
+
+    window.localStorage.setItem('theme', theme);
+  
+    const handleToggleClick = () => {
+        const currentTheme = localStorage.getItem('theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        element.classList.replace(currentTheme, newTheme);
+        localStorage.setItem('theme', newTheme);
+    }
+  
+    document.getElementById('toggleTheme').addEventListener('click', handleToggleClick);
+
+    document.addEventListener("astro:after-swap", () => {
+        const button = document.getElementById('toggleTheme');
+        button.addEventListener('click', handleToggleClick);
+        const theme = localStorage.getItem('theme');
+        element.classList.add(theme);
+    });
+
+    document.addEventListener('astro:page-load', () => {
+        const button = document.getElementById('toggleTheme');
+        button.addEventListener('click', handleToggleClick);
+        const theme = localStorage.getItem('theme');
+        element.classList.add(theme);
+    });
+</script>

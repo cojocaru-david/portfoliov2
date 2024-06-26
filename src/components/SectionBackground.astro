@@ -1,0 +1,14 @@
+---
+const {
+  height = "h-40 sm:h-56",
+  startColor = "rgba(255, 255, 255, 0.5)",
+  endColor = "rgba(255, 255, 255, 0.1)",
+} = Astro.props;
+---
+
+  <div
+    class:list={[
+      `w-full shrink-0 absolute -z-50 rotate-[-7deg] blur-[160px] rounded-full ${height} sm:rounded-3xl sm:rotate-[-10deg]`,
+    ]}
+    style={`background: linear-gradient(10deg, ${startColor}, ${endColor});`}
+  ></div>

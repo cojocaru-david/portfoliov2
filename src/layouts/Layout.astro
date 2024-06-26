@@ -2,9 +2,9 @@
 // David Cojocaru
 // Full Stack Developer from Romania
 // I am a self-taught developer who loves to build things for the web. I have been coding for 3 years now and I am always looking to learn new things. I am currently working on a few projects, but I am always open to new opportunities.
-
+import { ViewTransitions } from "astro:transitions";
 import Navbar from '../components/Navbar.astro';
-
+import Button from "../components/Button.astro";
 interface Props {
 	title: string;
 	description?: string;
@@ -26,11 +26,10 @@ const {
 	},
 	keywords = 'David Cojocaru, Portfolio, Developer, Full Stack, Romania',
 } = Astro.props as Props;
-
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-smooth overflow-x-hidden">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content="Astro description" />
@@ -39,7 +38,7 @@ const {
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+		<title>{'David Cojocaru - ' + title}</title>
 		<meta name="description" content={description} />
 		<meta name="keywords" content={keywords} />
 		<meta property="og:title" content={og.title} />
@@ -71,9 +70,13 @@ const {
 		<meta name="msapplication-config" content="/assets/favicons/browserconfig.xml">
 		<meta name="theme-color" content="#171717">
 		<link rel="stylesheet" href="/assets/css/base.css" />
+		<ViewTransitions />
 	</head>
 	<body class="bg-neutral-200 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 font-sans w-full min-h-screen">
 		<Navbar />
 		<slot />
+		<Button href="#hero" data-aos="fade-up" class="fixed bottom-4 right-4 z-50" variant="orange">
+			Back to top
+		</Button>
 	</body>
 </html>
