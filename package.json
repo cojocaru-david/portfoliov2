@@ -1,7 +1,7 @@
 {
-  "name": "newportfolio",
+  "name": "cojocarudavid.me",
   "type": "module",
-  "version": "0.0.1",
+  "version": "2.0.1",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -25,5 +25,19 @@
     "@iconify-json/bxl": "^1.1.10",
     "@iconify-json/mdi": "^1.1.67",
     "@types/aos": "^3.0.7"
-  }
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=17.0.0"
+  },
+  "browserslist": "> 0.25%, not dead",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cojocaru-david/portfoliov2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cojocaru-david/portfoliov2/issues"
+  },
+  "homepage": "https://v2.cojocarudavid.me",
+  "private": false
 }
