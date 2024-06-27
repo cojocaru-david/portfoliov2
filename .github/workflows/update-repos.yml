@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: "*/5 * * * *"
   workflow_dispatch:
-  
+
 jobs:
   update-repo-json:
     runs-on: ubuntu-latest
@@ -32,7 +32,14 @@ jobs:
         };
         axios.get('https://api.github.com/user/repos', config)
           .then(response => {
-            fs.writeFileSync('src/data/projects.json', JSON.stringify(response.data, null, 2));
+            const repos = response.data.map(repo => ({
+              name: repo.name,
+              description: repo.description,
+              stars: repo.stargazers_count,
+              url: repo.html_url,
+              image: repo.owner.avatar_url
+            }));
+            fs.writeFileSync('src/data/projects.json', JSON.stringify(repos, null, 2));
           })
           .catch(error => {
             console.error('Error fetching repos:', error);
