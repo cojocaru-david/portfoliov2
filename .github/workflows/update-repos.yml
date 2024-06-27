@@ -1,0 +1,54 @@
+name: Update Repo Data
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+  
+jobs:
+  update-repo-json:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install dependencies
+      run: npm install axios
+
+    - name: Update repo.json
+      run: |
+        node -e "
+        const fs = require('fs');
+        const axios = require('axios');
+        const token = process.env.GH_PAT;
+        const config = {
+          headers: { Authorization: \`token \${token}\` }
+        };
+        axios.get('https://api.github.com/user/repos', config)
+          .then(response => {
+            fs.writeFileSync('src/data/projects.json', JSON.stringify(response.data, null, 2));
+          })
+          .catch(error => {
+            console.error('Error fetching repos:', error);
+            process.exit(1);
+          });
+        "
+      shell: bash
+      env:
+        GH_PAT: ${{ secrets.GH_PAT }}
+
+    - name: Commit changes
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add src/data/projects.json
+        git commit -m "Update projects.json"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
