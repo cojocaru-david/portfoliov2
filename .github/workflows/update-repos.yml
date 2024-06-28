@@ -2,7 +2,7 @@ name: Update Repo Data
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "0 0 * * *"  # Runs every day at midnight (less often)
   workflow_dispatch:
 
 jobs:
@@ -55,7 +55,7 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git pull origin main
-        git add src/data/projects.json
+        git add src/data/projects.json package-lock.json package.json
         git commit -m "Update projects.json"
         git push
       env:
